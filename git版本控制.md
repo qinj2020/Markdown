@@ -76,10 +76,10 @@
     - `git diff --staged`对比已暂存文件与最后一次提交的文件差异
 
 - 调用其他工具比较差异
-    - `git difftool`诸如使用merge, vimdeff等工具
+    - `git difftool`诸如使用emerge, vimdeff等工具
 
 - 查看支持的差异比较工具
-      - `git difftool --tool-help`
+    - `git difftool --tool-help`
 
 - 提交更新
     - `git commit`之后输入提交说明
@@ -91,3 +91,56 @@
     - `git rm -f`如果要删除之前修改过或暂存区中的文件，必须使用强制删除选项`-f`
     - `git rm --cache`不再跟踪文件，但保留文件在磁盘中，不删除
     - `git rm log/\*.log`删除log/目录下扩展名为.log的所有文件。注意`*`前的`\`，表示Git有自己的文件模式扩展匹配方式，不需要shell帮忙展开
+
+- 重命名文件
+    - `git mv file_from file_to`
+
+- 查看提交历史
+    - `git log`
+    - 显示每次提交所引入的差异
+        - `git log -p -2`只显示最近两次提交所引入的差异
+        - 进行代码审查，或者快速浏览提交所带来的变化时非常有用
+    - 显示每次提交的简略统计信息
+        - `git log --stat`
+    - 将每个提交放在一行显示
+        - `git log --pretty=oneline`
+    - 定制显示格式
+        - `git log --pretty=format:"%h - %an, %ar : %s"`
+        - `%h`提交的简写哈希值
+        - `%an`作者名字
+        - `%ae`作者的电子邮箱
+        - `%ad`作者的修订日期
+        - `%ar`作者的修订日期，按多久以前的方式显示
+        - `%cn`提交者的名字
+        - `%ce`提交者的电子邮箱
+        - `%cd`提交日期
+        - `%cr`提交日期，按多久以前的方式显示
+        - `%s`提交说明
+    - 形象的分支，合并历史
+        - `--graph`
+        - `git log --pretty=format:"%h %s" --graph`
+    - `git log`的常用选项
+        - `-p`显示每个提交引入的差异
+        - `--stat`显示每次提交的文件修改统计信息
+        - `--shortstat`只显示--stat中最后的行数修改添加移除的统计信息
+        - `--name-only`仅显示已修改的文件清单
+        - `--name-status`显示新增，修改，删除的文件清单
+        - `-relative-date`使用较短的相对时间
+        - `--graph`在日志旁以ASCII图形显示分支与合并历史
+        - `--pretty`使用其他格式显示历史提交信息
+        - `--oneline`单行显示
+    - 列出最近两周的所有提交
+        - `git log --since=2.weeks`
+    - 添加或删除了某一特定函数的引用的提交
+        - `git log -S function_name`
+    - 只关心某些文件或目录的历史提交，可以在`git log`的最后指定它们的路径，用(`--`)隔开
+    - `git log`的输出选项
+        - `-<n>`仅显示最近的n条提交
+        - `--since`仅显示指定时间之后的提交
+        - `--until`仅显示指定时间之前的提交
+        - `--author`仅显示作者匹配指定字符串的提交
+        - `--committer`仅显示提交者匹配指定字符串的提交
+        - `--grep`仅显示提交说明中包含指定字符串的提交
+        - `-S`仅显示添加或删除内容匹配指定字符串的提交
+        - 示例：`git log --pretty="%h - %s" --author='xxxxx' --since="2021-10-06" --before="2021-12-08" --no-merges`
+        - `-no-merges`避免显示的合并提交弄乱历史记录
