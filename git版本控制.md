@@ -37,6 +37,9 @@
 2. 克隆现有仓库
       1. `git clone <url>`
 
+
+## 记录每次更新到仓库
+
 - 查看当前文件状态
     - `git status`
 
@@ -95,6 +98,9 @@
 - 重命名文件
     - `git mv file_from file_to`
 
+
+## 查看提交历史
+
 - 查看提交历史
     - `git log`
     - 显示每次提交所引入的差异
@@ -145,6 +151,9 @@
         - 示例：`git log --pretty="%h - %s" --author='xxxxx' --since="2021-10-06" --before="2021-12-08" --no-merges`
         - `-no-merges`避免显示的合并提交弄乱历史记录
 
+
+## 撤销操作
+
 - 撤销操作
     - 提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了。此时可以重新提交
         - `git commit --amend`
@@ -163,6 +172,9 @@
 - 撤销对文件的修改
     - `git checkout -- <file>`
     - 例如：`git checkout -- CONTRIBUTING.md`
+
+
+## 远程仓库的使用
 
 - 查看远程仓库
     - 查看已经配置的远程仓库服务器
