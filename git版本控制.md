@@ -144,3 +144,122 @@
         - `-S`仅显示添加或删除内容匹配指定字符串的提交
         - 示例：`git log --pretty="%h - %s" --author='xxxxx' --since="2021-10-06" --before="2021-12-08" --no-merges`
         - `-no-merges`避免显示的合并提交弄乱历史记录
+
+- 撤销操作
+    - 提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了。此时可以重新提交
+        - `git commit --amend`
+    - 例如：提交后发现忘记了暂存某些需要的修改，进行以下操作
+        ```git
+        git commit -m 'initial commit'
+        git add forgotten_file
+        git commit --amend
+        ```
+        - 最终只会有一个提交结果
+
+- 取消暂存的文件
+    - `git reset HEAD <file>`
+    - 例如：`git reset HEAD CONTRIBUTING.md`
+
+- 撤销对文件的修改
+    - `git checkout -- <file>`
+    - 例如：`git checkout -- CONTRIBUTING.md`
+
+- 查看远程仓库
+    - 查看已经配置的远程仓库服务器
+        - `git remote`
+        - `origin`Git给克隆仓库服务器的默认名字
+    - 显示需要读写远程仓库使用的Git保存的简写与其对应的URL
+      - `git remote -v`
+
+- 添加远程仓库
+    - 添加一个新的远程仓库，同时指定一个方便使用的简写
+          - `git remote add <shortname> <url>`
+          - 然后可以在命令行中使用字符串<shortname>来代替整个URL
+          - 例如：拉取仓库中有但本地没有的信息
+              - `git fetch <shortname>`
+
+- 从远程仓库获取数据
+    - 访问远程仓库，从中拉取本地还没有的数据
+        - `git fetch <remote>`
+        - `git fetch`只会将数据下载到本地仓库，并不会自动合并或修改当前的工作
+    - `git pull`可以自动抓取后合并远程分支到当前分支
+    - `git clone`自动设置本地master分支跟踪克隆的远程仓库的master分支
+
+- 推送到远程仓库
+    - `git push <remote> <branch>`
+    - 例如：将master分支推送到origin服务器
+        - `git push origin master`
+
+- 查看某个远程分支
+    - `git remote show <remote>`
+    - 例如：`git remote show origin`会列出远程仓库的URL与跟踪分支信息
+    - 该命令还列出了，当在特定分支上执行`git push`会自动推送到哪个远程分支，以及执行`git pull`时，哪些本地分支可以与它跟踪的远程分支自动合并
+
+- 重命名远程仓库
+    - `git remote rename`
+    - 例如：`git remote rename <old_name> <new_name>`
+    - 会修改所有远程跟踪的分支名字
+
+- 移除远程仓库
+    - `git remote remove`或者`git remote rm`
+    - 例如：`git remote remove xxx`
+    - 所有和这个远程仓库相关的远程跟踪分支以及配置信息也会被一起删除
+
+
+## 打标签
+
+- Git可以给仓库历史中的某一个提交打上标签，表示重要
+- 通常可以用来标记发布结点(v1.0, v2.0等等)
+  
+- 列出标签
+    - `git tag`
+    - 按特定模式查找标签
+        - 例如：`git tag -l "1.*"`, 也可以--list
+
+- Git支持两种标签：轻量标签(lightweight)与附注标签(annotated)
+- 通常使用附注标签，附注标签包含更多信息
+- 临时标签可以用轻量标签
+
+- 创建附注标签
+    - `git tag -a v1.4 -m "版本1.4"`
+  
+- 查看标签信息和与之对应的提交信息
+    - `git show v1.4`
+
+- 创建轻量标签
+    - `git tag v1.4.1`只需要提供标签名字
+
+- 后期打标签
+    - `git tag -a v1.2 9fceb02`
+    - 需要在命令的末尾指定提交的校验和(或者部分校验和)
+    - 查看提交信息校验和
+        - `git log --pretty=oneline`
+
+- 默认情况下，`git push`不会传送标签到远程仓库服务器上。在创建完标签之后必须显式的推送标签到远程仓库服务器
+    - `git push origin <tarname>`
+    - 一次推送多个标签
+        - `git push <remote> --tags`, 不会区分标签类型
+
+- 删除标签
+    - 删除本地仓库上的标签
+        - `git tag -d <tagname>`
+    - 删除远程仓库标签
+        - `git push origin --delete <tagname>`
+
+
+## Git别名
+
+- Git只是简单的将别名替换为对应的命令
+  
+- 例如：`git config --global alias.ci commit`, 这样提交时可以只输入`git ci -m xxx`
+  
+- 为了解决取消暂存文件的易用性问题，可以添加如下别名：
+    - `git config --global alias.unstage 'reset HEAD --'`
+    - 于是`git unstage fileA`等价于`git reset HEAD -- fileA`
+  
+- 添加一个last命令，轻松查看最后一次提交：
+    - `git config --global alias.last 'log -1 HEAD'`
+
+- 如果要执行外部命令而不是Git子命令，可以在前面加(`!`)
+    - 例如：`git config --global alias.visual '!gitk'`
+
