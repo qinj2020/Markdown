@@ -14,7 +14,7 @@
     - 针对当前仓库可以使用`--local`
 
 - 设置文本编辑器
-    - `git config ==global core.editor xxxxx`
+    - `git config --global core.editor xxxxx`
 
 - 检查某一项配置
     - `git config <key>`
@@ -274,4 +274,58 @@
 
 - 如果要执行外部命令而不是Git子命令，可以在前面加(`!`)
     - 例如：`git config --global alias.visual '!gitk'`
+
+
+## Git分支
+
+- 创建分支
+    - `git branch xxxxx`创建一个新分支，并不会自动切换到新分支中去
+
+- 查看分支列表
+    - `git branch`
+    - (`*`)指示当前所处分支
+
+- 查看各个分支当前所指对象
+    - `git log --oneline --decorate`
+
+- 切换分支
+    - `git checkout xxxxx`
+    - 分支切换会改变工作目录中的文件
+
+- 查看分支分叉历史，输出提交历史，各个分支的指向，项目分支的分叉情况
+    - `git log --oneline --decorate --graph --all`
+
+- 创建新分支的同时切换过去
+    - `git checkout -b <new_branch_name>`
+
+- 删除分支
+    - `git branch -d xxxxx`
+
+- 合并分支
+    - `git merge xxxxx`
+
+- 任何因包含合并冲突而有待解决的文件，都会以未合并状态标识出来
+
+- 解决所有文件里的冲突之后，使用`git add`将其标记为冲突已解决。一旦暂存这些原本有冲突的文件，Git就会将它们标记为冲突已解决
+
+- 查看每一个分支的最后一次提交
+    - `git branch -v`
+
+- 查看哪些分支已经合并到当前分支
+    - `git branch --merged`
+
+- 查看所有包含未合并工作的分支
+    - `git branch --no-merged`
+  
+- 删除未合并分支，丢掉那些工作
+    - `git branch -D xxxxx`强制删除
+
+
+## 远程分支
+
+- 查看远程引用的完整列表
+      - `git ls-remote <remote>`
+
+- 查看远程分支的更多信息
+    - `git remote show <remote>`
 
