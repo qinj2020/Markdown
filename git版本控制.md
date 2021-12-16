@@ -173,6 +173,16 @@
     - `git checkout -- <file>`
     - 例如：`git checkout -- CONTRIBUTING.md`
 
+- `HEAD`指向的版本就是当前版本，允许回退到历史的各个版本
+    - `git reset --hard commit_id`
+    - 回退到上一个版本
+        - `git reset --hard HEAD^`
+    - 回退到上上个版本
+        - `git reset --hard HEAD^^`
+    - 回退到上n个版本
+        - `git reset --hard HEAD~100`，n为100，当然输入id的前几位更合适
+    - 回退前可以先使用`git log`查看要回退的版本
+    - 可以用`git reflog`查看历史命令，确定要回退的当前版本的未来版本的id
 
 ## 远程仓库的使用
 
@@ -329,3 +339,64 @@
 - 查看远程分支的更多信息
     - `git remote show <remote>`
 
+- origin是`git clone`时默认的远程仓库名字
+- `git clone -o xxxxx`可以更改其名字
+
+- 抓取本地没有的数据，更新本地数据库
+    - `git fetch <remote>`
+
+- 添加一个新的远程仓库引用到当前项目‘
+    - `git remote add`
+
+- 公开分享一个分支，需要将其推送到远程仓库
+    - `git push <remote> <branch>`
+    - 示例：
+        - `git push origin serverfix:serverfix`
+        - 推送本地的serverfix分支作为远程仓库的serverfix分支
+        - `git push origin serverfix:xxxxx`
+        - 推送本地的serverfix分支作为远程仓库的xxxxx分支
+
+- 在远程跟踪分支之上建立一个新的用于工作的本地分支
+    - `git checkout -b serverfix origin/server`
+    - `git checkout --track origin/serverfix`一个快捷方式
+    - 如果尝试检出的分支不存在且刚好只有一个名字与之匹配的远程分支，那么Git会创建一个跟踪分支
+    - `git checkout serverfix`更快捷的方式
+
+- 查看所有跟踪分支
+    - `git branch -vv`
+
+- 如果想要统计最新的领先与落后的数字，需要先抓取所有的远程仓库
+    - `git fetch --all; git branch --vv`
+
+- 从服务器删除分支
+    - `git push origin --delete serverfix`
+
+
+## 变基
+
+- 整合来自不同分支的修改的两种方法：`merge`, `rebase`
+
+- 提取在C4中引入的补丁和修改，然后在C3的基础上应用一次，这就是变基
+
+- 可以使用rebase命令将提交到某一分支的所有修改到移至另一分支上
+
+- 变基原理
+    - 首先找到这两个分支的最近共同祖先，然后比对当前分支相对于该祖先的历次提交，提取相应的修改并存为临时文件，然后将当前分支指向目标基底，最后将之前另存为临时文件的修改依次应用到目标基底分支
+
+- 变基使得历史提交更加整洁，提交历史是一条直线没有分叉
+
+- 变基使用例子：
+    - 检出experiment分支，然后将它变基到master分支
+        - `git checkout experiment`
+        - `git rebase master`
+        - `git checkout master` // 回到master分支
+        - `git merge experiment`    // 快进合并
+    - 将client中的修改合并到主分支并发布，但暂时并不想合并server中的修改(client分支是在server分支的基础上开出来的)
+        - `git rebase --onto master server client`，然后快进合并
+        - 命令的意思是：取出client分支，找出它从server分支分歧之后的补丁，然后把这些补丁在master分支上重放一遍，让client看起来像是直接基于master修改一样
+
+- 直接将主题分支变基到目标分支上
+    - `git rebase <base_branch> <topic_branch>`
+        - 将server分支中的修改直接变基到master分支上
+            - `git rebase master server`，然后快进合并分支
+            - 
