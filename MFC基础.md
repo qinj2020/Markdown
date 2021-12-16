@@ -37,3 +37,33 @@
         - 示例：`dynamicLayout->AddItem(hWndControl, moveSettings, sizeSettings);`
     - 要启用或者禁用对话框动态布局，调用`CWnd：：EnableDynamicLayout()` 方法
         - 示例：`pDialog->EnableDynamicLayout(TRUE);`
+
+- 3个WindowsAPI可以运行可执行文件
+    1. `WinExec()`主要用于运行exe文件
+       - `UINT WinExec(LPCSTR lpCmdLine, UINT uCmdShow)`
+       -  `lpCmdLine`要执行的应用程序的命令行字符串
+       -  `uCmdShow`定义程序的窗口如何显示
+       -  返回值>31，表示函数调用成功。失败返回以下值：
+          1. 0：系统资源不足
+          2. `ERROR_BAD_FORMAT`：exe文件无效
+          3. `ERROR_FILE_NOT_FOUND`：未找到指定文件
+          4. `ERROR_PATH_NOT_FOUND`：未找到指定路径
+    2. `ShellExecute()`不仅可以运行exe文件，非exe文件自动通过关联的程序打开
+        ```c++
+            HINSTANCE ShellExecute(HWND hWnd, LPCTSTR lpOperation, LPCTSTR lpFile, LPCTSTR lpParameters, LPCTSTR lpDirectory, INT nShowCmd);
+        ```
+        - `hWnd`指定父窗口句柄
+        - `lpOperation`指定要进行的操作，"open"表示执行指定的程序或打开指定的文件或文件夹，"print"表示打印指定文件, "explore"表示浏览指定文件夹，NULL默认open
+        - `lpFile`指定文件
+        - `lpParameters`指定命令行参数，若非exe文件，则应为NULL
+        - `lpDirectory`指定默认目录
+        - `nShowCmd`指定程序窗口的初始显示方式，若非exe文件，则应为0，可以使用以下值：
+            - `SW_HIDE`, `SW_SHOW`, `SW_SHOWNORMAL`, `SW_SHOWMAXIMIZED`, `SW_SHOWMINIMIZED`
+        - 返回值>32，表示函数调用成功
+        - 示例：
+            - `ShellExecute(handle, "open ", path_to_folder, NULL, NULL, SW_SHOWNORMAL);`
+            - `ShellExecute(handle, "explore ", path_to_folder, NULL, NULL, SW_SHOWNORMAL);`
+            - `ShellExecute(this->m_hWnd, "open", "notepad.exe", "c:\\MyLog.log", "", SW_SHOW);`打开一个应用程序，并没有给完整路径
+            - `ShellExecute(this->m_hWnd, "open", "c:\\abc.txt", "", "", SW_SHOW);`打开与某程序关联的文件
+            - `ShellExecute(this->m_hWnd, "open", "http://www.google.com", "", "", SW_SHOW);`打开一个网页
+
