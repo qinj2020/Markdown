@@ -23,6 +23,13 @@
         - `-H.`表示在当前目录中搜索根CMakeLists.txt
         - `-Bbuild`告诉CMake在一个名为build的目录中生成所有的文件
 
+- 一个完整示例
+    ```cmake
+        cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+        project(window LANGUAGES C)
+        add_executable(window WIN32 window.c)
+    ``` 
+
 - CMake是一个构建系统生成器，描述构建系统应当如何操作才能编译代码，CMake为所选的构建系统生成相应的指令。默认情况下，在Windows上使用Visual Studio作为生成器。在类Unix系统上使用Makefile生成器
 
 - 构建目标
