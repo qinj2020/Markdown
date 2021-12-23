@@ -508,3 +508,48 @@
 - 移交项目
     - 如果你想把一个项目移交给GitHub中的另一个人或另一个组织，设置页面的`options`标签下有一个`Transfer ownership`选项可以使用
 
+- 引用日志
+    - 工作时，Git在后台保存一个应用日志(reflog)，记录最近几个月你的HEAD和分支引用所指向的历史
+    - `git reflog`  // 查看引用日志
+    - 查看仓库中HEAD在5次前的所指向的提交
+        - `git show HEAD@{5}`
+    - 查看某个分支一定时间前的位置
+        - `git show master@{yesterday}`
+    - 查看类似于git log输出格式的引用日志信息
+        - `git log -g`
+    - 引用日志只存在于本地仓库，克隆一个仓库，其引用日志是空的
+
+-  祖先引用是另一种指明一个提交的方式，在引用的尾部加上一个`^`，表示该引用的上一个提交
+
+- 提交区间
+    - `git log master..experiment`
+    - `master..experiment`  // 在experiment分支中而不在master分支中的
+    - 输出在当前分支而不在远程分支的提交
+        - `git log origin/master..HEAD`
+        - 如果留空其中一边会默认为HEAD
+    - `git log ^refA refB` // 前面加上`^`或者`--not`，表示不包含分支
+    - 查看master分支或者experiment分支中包含的但不是两者共有的
+        - `git log master...experiment`
+        - 可以使用`--left-right`显示每个提交属于哪一侧的分支
+        - `git log --left-right master...experiment`
+
+- 交互式暂存
+    - 可以将文件的特定部分组合成提交。当修改了大量的文件后，希望这些改动能拆分为若干提交而不是混杂在一起成为一个提交时，适合使用
+
+- Git中的三棵树，此处树指的是文件集合
+    - HEAD是当前分支引用的指针，总是指向该分支的最后一次提交，将会是下一次提交的父结点，可看做该分支最后一次提交的快照
+    - Index是预期的下一次提交，相当于暂存区
+    - Working Directory工作目录，也叫作工作区，在将修改提交到暂存区并记录到历史之前，可以随意更改。另外两棵树以一种高效但并不直观的方式，将它们的内容存储在.git文件夹中。工作目录将它们解包为实际的文件以便编辑
+
+- `git reset`做的三件事
+    1. 移动HEAD(--soft)
+        - `git reset --soft HEAD^`  // `--soft` 仅仅停在此处
+        - 撤销上一次提交，暂存区和工作目录不变
+    2. 更新索引(--mixed)
+        - `git reset [--mixed] HEAD^`   // `--mixed` 在此步停止，默认选项，可以省略 
+        - 撤销上一次提交，并取消暂存的所有内容
+        - 相当于回滚到了所有git add和git commit的命令执行之前
+    3. 更新工作目录(--hard)
+        - `git reset --hard HEAD^`  // 使用`--hard`选项才会走到这一步
+        - 撤销最后一次提交，git add和git commit命令以及工作目录中的所有工作
+        - 工作目录中的文件将会被覆盖，如果之前没提交，将无法恢复，危险操作  
