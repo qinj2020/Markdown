@@ -314,3 +314,13 @@
 
 - 默认窗口过程函数
     - `return DefWindowProc(hwnd, message, wParam, lParam);`
+
+- 占位符
+    - C标准
+        - `%s` -> `const char*`
+        - `%ls` -> `const wchar_t*`
+    - 微软
+        - `%s` -> `const wchar_t*`
+        - `%S`或`%hs` -> `const char*`
+    - `%hs`可以保证微软与其他C库都都解释成`const char*`
+

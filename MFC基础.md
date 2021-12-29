@@ -7,9 +7,9 @@
 
 
 ## 单文档界面(SDI)与多文档界面(MDI)
+
 1. SDI应用程序一次只允许一个打开的文档框架窗口。
 2. MDI应用程序同一个应用程序实例中打开多个文档框架窗口。
-
 
 - 任何对象都可以通过调用全局函数`AfxGetApp`来获取指向应用程序对象的指针。
 
@@ -21,7 +21,6 @@
         - 将"调整大小类型"设置为"无"
         - 将"移动类型"设置为"两者 "
         - 对于 "移动类型"下的"移动 X"和"移动 Y" 值，设置 100%，使控件保持与右下角的固定距离。
-
 
 - 以编程方式设置动态布局属性
     - 调用`GetDynamicLayout()`获得指向`CMFCDynamicLayout`对象的指针
@@ -67,3 +66,47 @@
             - `ShellExecute(this->m_hWnd, "open", "c:\\abc.txt", "", "", SW_SHOW);`打开与某程序关联的文件
             - `ShellExecute(this->m_hWnd, "open", "http://www.google.com", "", "", SW_SHOW);`打开一个网页
 
+- MFC常用全局函数
+    - `AfxBeginThread()`  // 开始一个新的进程
+    - `AfxEndThread()`    // 结束一个进程
+    - `AfxMessageBox()`   // 弹出一个消息框
+    - `AfxGetApp()`       // 获得应用程序对象的指针
+    - `AfxGetMainWnd()`   // 获得程序主窗口指针
+    - `AfxGetInstance()`  // 获得应用程序实例句柄
+
+- CString字符串连接
+    - 可以使用`+`拼接，要求至少有一个是CString对象
+    - 格式化字符串
+        - 使用`cstring.Format()`函数
+- CString类型转换
+    - CString -> int
+        - `i = _ttoi(cstring);` // cstring = "-98中文字体";
+    - CString -> double
+        - `d = _ttof(cstring3);`    // cstring = "99.99999english";
+- 创建CString对象
+    - `CString cstring = "xxxxx";`
+    - `CString cstring("xxxxx");`
+    - `CString csting = pChar;`
+    - `CString cstring(pChar);`
+- 获得指向CString的字符串指针
+    - `LPCTSTR pChar = cstring;`
+    - `LPTSTR pChar = cstring.GetBuffer();` // 在使用CString的其他成员之前必须先调用`ReleaseBuffer();`
+    - `LPTSTR pChar = (LPTSTR)(LPCTSTR)cstring;`    // 使用强转的方法
+
+- 各文件后缀名含义
+    - `.ncb`无编译浏览文件(No Compile Browser)
+    - `.aps`资源辅助文件(App Studio File)
+    - `.opt`工程关于开发环境的参数文件
+    - `.clw`ClassWizard信息文件，INI文件的格式
+    - `.dsp`工程文件(Developer Studio Project)，文本格式
+    - `.dsw`工作区文件(Develop Studio Workspace)，与.dsp类似
+    - `.plg`编译日志文件，编译时的error和warning信息文件
+    - `.bsc`浏览项目信息文件
+    - `.map`执行文件的映像信息记录文件
+    - `.pch`预编译文件Pre-Compiled File，文件比较大，可加快编译速度
+    - `.pdb`记录程序相关的一些数据和调试信息(Program Database)
+    - `.hpj`生成帮助文件的工程(Help Project)
+    - `.mdp`旧版本的项目文件(Microsoft DevStudio Project)
+
+- 编译链接时总是提示找不到预编译头的问题
+    - 直接向工程文件里加入.cpp源文件后，在源文件的头部添加`#include "stdafx.h"`
